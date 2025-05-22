@@ -3,7 +3,7 @@ import type { Story } from '../data/stories';
 import { useUiStore } from '../store/ui';
 import SoundIcon from './icons/SoundIcon.vue';
 import NoSoundIcon from './icons/NoSoundIcon.vue';
-import { computed, ref, useTemplateRef, watchEffect } from 'vue';
+import { computed, ref, useTemplateRef, watchEffect, watch } from 'vue';
 import { useStoriesStore } from '../store/stories';
 
 interface StoriesCardProps {
@@ -27,6 +27,8 @@ const cardHasVideo = computed(() => {
 
 
 const video = useTemplateRef<HTMLVideoElement>('video')
+const videoDuration = ref(0)
+const isVideoReady = ref(false)
 
 const paused = ref(false)
 const activeIndex = ref(0)
@@ -77,21 +79,30 @@ const handlePointerUp = () => {
     paused.value = false
 }
 
-
-
 const activeSlide = computed(() => {
     return slides?.[activeIndex.value]
 })
+
+const handleVideoMetadataLoaded = () => {
+    if (video.value) {
+        videoDuration.value = video.value.duration
+    }
+}
+
+const handleVideoCanPlay = () => {
+    isVideoReady.value = true
+}
+
+const handleVideoWaiting = () => {
+    isVideoReady.value = false
+}
 
 const activeSlideDuration = computed(() => {
     const specifiedDuration = activeSlide.value?.duration
     if (specifiedDuration) return specifiedDuration;
 
-    if (video.value) {
-        const videoDuration = video.value.duration;
-        if (videoDuration > 0) {
-            return videoDuration;
-        }
+    if (currentSlideHasVideo.value && videoDuration.value > 0) {
+        return videoDuration.value;
     }
     return DEFAULT_SLIDE_DURATION
 })
@@ -99,8 +110,6 @@ const activeSlideDuration = computed(() => {
 const currentSlideHasVideo = computed(() => {
     return !!activeSlide.value?.video
 })
-
-
 
 watchEffect(() => {
     console.log('Watching paused', paused.value)
@@ -111,13 +120,16 @@ watchEffect(() => {
     }
 })
 
+watch(activeSlide, () => {
+    isVideoReady.value = false
+})
 
 </script>
 
 <template>
     <div class="story-card">
-        <div class="story-card__progress" v-if="slides?.length && isActiveStory">
-            <div class="story-card__progress-bullet" v-for="slide in slides" :key="slide.id">
+        <div class="story-card__bullets" v-if="slides?.length && isActiveStory">
+            <div class="story-card__bullet" v-for="slide in slides" :key="slide.id">
 
             </div>
         </div>
@@ -130,7 +142,12 @@ watchEffect(() => {
                 <div class="story-card__slide" v-if="activeSlide" :key="activeSlide.id">
                     <img :src="activeSlide.image" alt="" class="story-card__slide-image">
                     <video :src="activeSlide.video" playsinline autoplay :muted="uiStore.muted" loop
-                        class="story-card__slide-video" v-if="activeSlide.video" ref="video"></video>
+                        class="story-card__slide-video" v-if="activeSlide.video" ref="video"
+                        @loadedmetadata="handleVideoMetadataLoaded" @canplay="handleVideoCanPlay"
+                        @waiting="handleVideoWaiting"></video>
+                    <div class="loader" v-if="currentSlideHasVideo && !isVideoReady">
+                        <div class="loader__circle"></div>
+                    </div>
                 </div>
             </div>
             <div class="story__controls-layer" v-if="showSlides">
@@ -201,6 +218,8 @@ watchEffect(() => {
 
 .story-card__slide {
     grid-area: stack;
+    position: relative;
+    background-color: #212121;
     position: relative;
 }
 
@@ -356,17 +375,49 @@ watchEffect(() => {
 }
 
 
-.story-card__progress {
+.story-card__bullets {
     gap: 5px;
     display: flex;
     align-items: center;
 }
 
-.story-card__progress-bullet {
+.story-card__bullet {
     height: 5px;
     width: 1px;
     flex-grow: 1;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+}
+
+
+
+.loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.loader__circle {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>
