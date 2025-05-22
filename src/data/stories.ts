@@ -35,7 +35,7 @@ const stories: Story[] = [
       {
         id: 2,
         image: "https://markweber.ru/wp-content/uploads/2025/03/02@2x-1.jpg",
-        duration: 5,
+        duration: 25,
       },
       {
         id: 3,

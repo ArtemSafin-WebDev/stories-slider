@@ -33,70 +33,93 @@ const paused = ref(false)
 const activeIndex = ref(0)
 const holdTimeout = ref<number | null>(null)
 const wasHoldTriggered = ref(false)
+const progressAnimationFrame = ref<number | null>(null)
+const progress = ref(0)
+const elapsedTime = ref(0)
+const lastStartTime = ref(0)
 const HOLD_DURATION = 500 // 500ms hold duration
 const DEFAULT_SLIDE_DURATION = 5 // 5 seconds
+
+const activeSlide = computed(() => {
+    return slides?.[activeIndex.value]
+})
 
 const showSlides = computed(() => {
     return slides?.length && isActiveStory.value && uiStore.isModalOpen
 })
 
-const handlePrev = () => {
-    if (wasHoldTriggered.value) {
-        wasHoldTriggered.value = false
-        return
+const startProgress = () => {
+    if (progressAnimationFrame.value) {
+        cancelAnimationFrame(progressAnimationFrame.value)
     }
-    if (activeIndex.value > 0) {
-        activeIndex.value--
+
+    lastStartTime.value = Date.now() - elapsedTime.value
+    const duration = activeSlideDuration.value * 1000 // convert to milliseconds
+
+    const animate = () => {
+        const currentElapsed = Date.now() - lastStartTime.value
+        elapsedTime.value = currentElapsed
+        progress.value = Math.min((currentElapsed / duration) * 100, 100)
+
+        if (currentElapsed < duration) {
+            progressAnimationFrame.value = requestAnimationFrame(animate)
+        } else {
+            handleNext()
+        }
     }
+
+    progressAnimationFrame.value = requestAnimationFrame(animate)
 }
 
-const handleNext = () => {
-    if (wasHoldTriggered.value) {
-        wasHoldTriggered.value = false
-        return
-    }
-    if (slides && activeIndex.value < slides.length - 1) {
-        activeIndex.value++
+const stopProgress = () => {
+    if (progressAnimationFrame.value) {
+        cancelAnimationFrame(progressAnimationFrame.value)
+        progressAnimationFrame.value = null
     }
 }
-
-const handlePointerDown = () => {
-    console.log('Mousedown')
-    wasHoldTriggered.value = false
-    holdTimeout.value = window.setTimeout(() => {
-        paused.value = true
-        wasHoldTriggered.value = true
-    }, HOLD_DURATION)
-}
-
-const handlePointerUp = () => {
-    console.log('Mouseup')
-    if (holdTimeout.value) {
-        clearTimeout(holdTimeout.value)
-        holdTimeout.value = null
-    }
-    paused.value = false
-}
-
-const activeSlide = computed(() => {
-    return slides?.[activeIndex.value]
-})
 
 const resetStates = () => {
     videoDuration.value = 0
     isVideoReady.value = false
     paused.value = false
     activeIndex.value = 0
+    progress.value = 0
+    elapsedTime.value = 0
+    lastStartTime.value = 0
     if (holdTimeout.value) {
         clearTimeout(holdTimeout.value)
         holdTimeout.value = null
     }
     wasHoldTriggered.value = false
+    stopProgress()
 }
 
 watch(isActiveStory, (newValue) => {
     if (!newValue) {
         resetStates()
+    } else if (!currentSlideHasVideo.value && !paused.value) {
+        startProgress()
+    }
+})
+
+watch([isVideoReady, paused], ([ready, isPaused]) => {
+    if (currentSlideHasVideo.value) {
+        if (ready && !isPaused) {
+            startProgress()
+        } else {
+            stopProgress()
+        }
+    } else if (!isPaused) {
+        startProgress()
+    } else {
+        stopProgress()
+    }
+})
+
+watch(activeSlide, () => {
+    isVideoReady.value = false
+    if (!currentSlideHasVideo.value && !paused.value) {
+        startProgress()
     }
 })
 
@@ -137,9 +160,59 @@ watchEffect(() => {
     }
 })
 
-watch(activeSlide, () => {
-    isVideoReady.value = false
-})
+const handlePrev = () => {
+    if (wasHoldTriggered.value) {
+        wasHoldTriggered.value = false
+        return
+    }
+    if (activeIndex.value > 0) {
+        stopProgress()
+        activeIndex.value--
+        progress.value = 0
+        elapsedTime.value = 0
+        lastStartTime.value = 0
+        isVideoReady.value = false
+        if (video.value) {
+            video.value.currentTime = 0
+        }
+    }
+}
+
+const handleNext = () => {
+    if (wasHoldTriggered.value) {
+        wasHoldTriggered.value = false
+        return
+    }
+    if (slides && activeIndex.value < slides.length - 1) {
+        stopProgress()
+        activeIndex.value++
+        progress.value = 0
+        elapsedTime.value = 0
+        lastStartTime.value = 0
+        isVideoReady.value = false
+        if (video.value) {
+            video.value.currentTime = 0
+        }
+    }
+}
+
+const handlePointerDown = () => {
+    console.log('Mousedown')
+    wasHoldTriggered.value = false
+    holdTimeout.value = window.setTimeout(() => {
+        paused.value = true
+        wasHoldTriggered.value = true
+    }, HOLD_DURATION)
+}
+
+const handlePointerUp = () => {
+    console.log('Mouseup')
+    if (holdTimeout.value) {
+        clearTimeout(holdTimeout.value)
+        holdTimeout.value = null
+    }
+    paused.value = false
+}
 
 </script>
 
@@ -151,7 +224,8 @@ watch(activeSlide, () => {
                 next: index > activeIndex,
                 active: index === activeIndex
             }">
-                <div class="story-card__bullet-progress"></div>
+                <div class="story-card__bullet-progress"
+                    :style="{ width: index === activeIndex ? `${progress}%` : '0%' }"></div>
             </div>
         </div>
         <div class="story-card__grid" @pointerdown="handlePointerDown" @pointerup="handlePointerUp"
