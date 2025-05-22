@@ -1,0 +1,285 @@
+<script lang="ts" setup>
+import type { Story } from '../data/stories';
+import { useUiStore } from '../store/ui';
+import SoundIcon from './icons/SoundIcon.vue';
+import NoSoundIcon from './icons/NoSoundIcon.vue';
+import { computed, ref, useTemplateRef, watchEffect } from 'vue';
+import { useStoriesStore } from '../store/stories';
+
+interface StoriesCardProps {
+    story: Story
+}
+const { story } = defineProps<StoriesCardProps>();
+
+const uiStore = useUiStore();
+const storiesStore = useStoriesStore();
+
+
+const isActiveStory = computed(() => {
+    return storiesStore.activeStory?.id === story.id;
+})
+
+const { isNew, logo, desc, slides, preview } = story;
+
+const cardHasVideo = computed(() => {
+    return slides?.some((slide) => slide.video);
+});
+
+
+const video = useTemplateRef<HTMLVideoElement>('video')
+
+const paused = ref(false)
+const activeIndex = ref(0)
+const activeSlide = computed(() => {
+    return slides?.[activeIndex.value]
+})
+
+
+watchEffect(() => {
+    console.log('Watching paused', paused.value)
+    if (paused.value) {
+        video.value?.pause()
+    } else {
+        video.value?.play()
+    }
+})
+
+
+</script>
+
+<template>
+    <div class="story-card">
+        <div class="story-card__progress" v-if="slides?.length && isActiveStory">
+            <div class="story-card__progress-bullet" v-for="slide in slides" :key="slide.id">
+
+            </div>
+        </div>
+        <div class="story-card__grid">
+            <div class="story-card__bg-wrapper" v-if="preview">
+                <img :src="preview" alt="" class="story-card__bg-image" loading="lazy">
+            </div>
+            <div class="story-card__slides" v-if="slides?.length && isActiveStory && uiStore.isModalOpen">
+                <div class="story-card__slide" v-if="activeSlide" :key="activeSlide.id">
+                    <img :src="activeSlide.image" alt="" class="story-card__slide-image">
+                    <video :src="activeSlide.video" playsinline autoplay :muted="uiStore.muted" loop
+                        class="story-card__slide-video" v-if="activeSlide.video" ref="video"></video>
+                </div>
+            </div>
+            <div class="story-card__content">
+                <div class="story-card__top-row">
+                    <div class="story-card__is-new" v-if="isNew">
+                        New
+                    </div>
+                    <div class="story-card__logo-wrapper" v-if="logo">
+                        <img class="story-card__logo" :src="logo" alt="Logo">
+                    </div>
+                </div>
+                <div class="story-card__bottom-row">
+                    <div class="story-card__desc" v-if="desc">
+                        <div class="story-card__desc-text" v-html="desc">
+
+                        </div>
+                    </div>
+                    <button class="story-card__mute-btn" @click.prevent="uiStore.toggleMuted" v-if="cardHasVideo">
+                        <SoundIcon v-if="!uiStore.muted" />
+                        <NoSoundIcon v-else />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+
+<style lang="scss" scoped>
+.story-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    width: 475px;
+    zoom: 0.7;
+}
+
+.story-card__grid {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'stack';
+    border-radius: 5px;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        grid-area: stack;
+        aspect-ratio: 475 / 800;
+    }
+}
+
+.story-card__slides {
+    grid-area: stack;
+    // background-color: red;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'stack';
+    background-color: black;
+
+}
+
+.story-card__slide {
+    grid-area: stack;
+    position: relative;
+}
+
+.story-card__slide-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-card__slide-video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-card__bg-wrapper {
+    grid-area: stack;
+    position: relative;
+}
+
+.story-card__bg-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.01);
+}
+
+
+.story-card__content {
+    grid-area: stack;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 10;
+}
+
+.story-card__top-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: -20px;
+    margin-bottom: 0;
+    padding: 20px;
+    padding-bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.00) 100%);
+}
+
+.story-card__is-new {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: -0.48px;
+    color: white;
+    border-radius: 5px;
+    background: #F14848;
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 6px 10px;
+}
+
+.story-card__logo-wrapper {
+    border-radius: 50%;
+    overflow: hidden;
+    background: white;
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+}
+
+.story-card__logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.story-card__bottom-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin: -20px;
+    margin-top: auto;
+    padding: 20px;
+    padding-top: 40px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.story-card__mute-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: none;
+    background-color: white;
+    outline: none;
+    margin-left: auto;
+    cursor: pointer;
+
+    svg {
+        fill: #212121;
+        display: block;
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.story-card__desc {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.6px;
+}
+
+.story-card__desc-text {
+
+
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.story-card__progress {
+    gap: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.story-card__progress-bullet {
+    height: 5px;
+    width: 1px;
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+</style>
