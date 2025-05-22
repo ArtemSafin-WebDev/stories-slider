@@ -30,9 +30,76 @@ const video = useTemplateRef<HTMLVideoElement>('video')
 
 const paused = ref(false)
 const activeIndex = ref(0)
+const holdTimeout = ref<number | null>(null)
+const wasHoldTriggered = ref(false)
+const HOLD_DURATION = 500 // 500ms hold duration
+const DEFAULT_SLIDE_DURATION = 5 // 5 seconds
+
+const showSlides = computed(() => {
+    return slides?.length && isActiveStory.value && uiStore.isModalOpen
+})
+
+const handlePrev = () => {
+    if (wasHoldTriggered.value) {
+        wasHoldTriggered.value = false
+        return
+    }
+    if (activeIndex.value > 0) {
+        activeIndex.value--
+    }
+}
+
+const handleNext = () => {
+    if (wasHoldTriggered.value) {
+        wasHoldTriggered.value = false
+        return
+    }
+    if (slides && activeIndex.value < slides.length - 1) {
+        activeIndex.value++
+    }
+}
+
+const handlePointerDown = () => {
+    console.log('Mousedown')
+    wasHoldTriggered.value = false
+    holdTimeout.value = window.setTimeout(() => {
+        paused.value = true
+        wasHoldTriggered.value = true
+    }, HOLD_DURATION)
+}
+
+const handlePointerUp = () => {
+    console.log('Mouseup')
+    if (holdTimeout.value) {
+        clearTimeout(holdTimeout.value)
+        holdTimeout.value = null
+    }
+    paused.value = false
+}
+
+
+
 const activeSlide = computed(() => {
     return slides?.[activeIndex.value]
 })
+
+const activeSlideDuration = computed(() => {
+    const specifiedDuration = activeSlide.value?.duration
+    if (specifiedDuration) return specifiedDuration;
+
+    if (video.value) {
+        const videoDuration = video.value.duration;
+        if (videoDuration > 0) {
+            return videoDuration;
+        }
+    }
+    return DEFAULT_SLIDE_DURATION
+})
+
+const currentSlideHasVideo = computed(() => {
+    return !!activeSlide.value?.video
+})
+
 
 
 watchEffect(() => {
@@ -54,16 +121,21 @@ watchEffect(() => {
 
             </div>
         </div>
-        <div class="story-card__grid">
+        <div class="story-card__grid" @pointerdown="handlePointerDown" @pointerup="handlePointerUp"
+            @pointerleave="handlePointerUp" @pointercancel="handlePointerUp">
             <div class="story-card__bg-wrapper" v-if="preview">
                 <img :src="preview" alt="" class="story-card__bg-image" loading="lazy">
             </div>
-            <div class="story-card__slides" v-if="slides?.length && isActiveStory && uiStore.isModalOpen">
+            <div class="story-card__slides" v-if="showSlides">
                 <div class="story-card__slide" v-if="activeSlide" :key="activeSlide.id">
                     <img :src="activeSlide.image" alt="" class="story-card__slide-image">
                     <video :src="activeSlide.video" playsinline autoplay :muted="uiStore.muted" loop
                         class="story-card__slide-video" v-if="activeSlide.video" ref="video"></video>
                 </div>
+            </div>
+            <div class="story__controls-layer" v-if="showSlides">
+                <div class="story__controls-layer-prev" @click="handlePrev"></div>
+                <div class="story__controls-layer-next" @click="handleNext"></div>
             </div>
             <div class="story-card__content">
                 <div class="story-card__top-row">
@@ -165,6 +237,19 @@ watchEffect(() => {
     transform: scale(1.01);
 }
 
+.story__controls-layer {
+    grid-area: stack;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    z-index: 5;
+    cursor: pointer;
+}
+
+.story__controls-layer-prev,
+.story__controls-layer-next {
+    height: 100%;
+    width: 100%;
+}
 
 .story-card__content {
     grid-area: stack;
@@ -172,6 +257,7 @@ watchEffect(() => {
     flex-direction: column;
     padding: 20px;
     z-index: 10;
+    pointer-events: none;
 }
 
 .story-card__top-row {
@@ -239,6 +325,7 @@ watchEffect(() => {
     outline: none;
     margin-left: auto;
     cursor: pointer;
+    pointer-events: all;
 
     svg {
         fill: #212121;

@@ -11,6 +11,7 @@ type StorySlide = {
   id: number | string;
   image: string;
   video?: string;
+  duration?: number;
 };
 
 const stories: Story[] = [
@@ -29,14 +30,17 @@ const stories: Story[] = [
           "https://markweber.ru/wp-content/uploads/2025/03/isk_1_stories_preview.webp",
         video:
           "https://markweber.ru/wp-content/uploads/2025/03/isk-reels-compressed.mp4",
+        duration: 10,
       },
       {
         id: 2,
         image: "https://markweber.ru/wp-content/uploads/2025/03/02@2x-1.jpg",
+        duration: 5,
       },
       {
         id: 3,
         image: "https://markweber.ru/wp-content/uploads/2025/03/01@2x-1.jpg",
+        duration: 5,
       },
     ],
   },
@@ -57,6 +61,7 @@ const stories: Story[] = [
         id: 2,
         image:
           "https://markweber.ru/wp-content/uploads/2025/04/aida2005-1.webp",
+        duration: 5,
       },
       {
         id: 3,
