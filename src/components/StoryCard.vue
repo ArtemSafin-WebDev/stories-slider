@@ -29,7 +29,6 @@ const cardHasVideo = computed(() => {
 const video = useTemplateRef<HTMLVideoElement>('video')
 const videoDuration = ref(0)
 const isVideoReady = ref(false)
-
 const paused = ref(false)
 const activeIndex = ref(0)
 const holdTimeout = ref<number | null>(null)
@@ -83,6 +82,24 @@ const activeSlide = computed(() => {
     return slides?.[activeIndex.value]
 })
 
+const resetStates = () => {
+    videoDuration.value = 0
+    isVideoReady.value = false
+    paused.value = false
+    activeIndex.value = 0
+    if (holdTimeout.value) {
+        clearTimeout(holdTimeout.value)
+        holdTimeout.value = null
+    }
+    wasHoldTriggered.value = false
+}
+
+watch(isActiveStory, (newValue) => {
+    if (!newValue) {
+        resetStates()
+    }
+})
+
 const handleVideoMetadataLoaded = () => {
     if (video.value) {
         videoDuration.value = video.value.duration
@@ -129,8 +146,12 @@ watch(activeSlide, () => {
 <template>
     <div class="story-card">
         <div class="story-card__bullets" v-if="slides?.length && isActiveStory">
-            <div class="story-card__bullet" v-for="slide in slides" :key="slide.id">
-
+            <div class="story-card__bullet" v-for="(slide, index) in slides" :key="slide.id" :class="{
+                prev: index < activeIndex,
+                next: index > activeIndex,
+                active: index === activeIndex
+            }">
+                <div class="story-card__bullet-progress"></div>
             </div>
         </div>
         <div class="story-card__grid" @pointerdown="handlePointerDown" @pointerup="handlePointerUp"
@@ -387,8 +408,22 @@ watch(activeSlide, () => {
     flex-grow: 1;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+    position: relative;
+
+    &.prev {
+        background-color: white;
+    }
 }
 
+.story-card__bullet-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0%;
+    height: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
 
 
 .loader {
