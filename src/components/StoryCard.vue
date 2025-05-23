@@ -14,6 +14,11 @@ const { story } = defineProps<StoriesCardProps>();
 const uiStore = useUiStore();
 const storiesStore = useStoriesStore();
 
+watch(() => uiStore.isModalOpen, (isOpen) => {
+    if (!isOpen) {
+        resetStates()
+    }
+})
 
 const isActiveStory = computed(() => {
     return storiesStore.activeStory?.id === story.id;
