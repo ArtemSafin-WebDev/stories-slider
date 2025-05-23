@@ -38,6 +38,28 @@ function handleSlideChange(swiper: SwiperInstance) {
     activeSlideIndex.value = swiper.activeIndex;
 }
 
+function handleReachStart() {
+    console.log('Reach start');
+
+    // Go to previous story if available
+    if (activeStoryIndex.value > 0) {
+        swiperInstance.value?.slideTo(activeStoryIndex.value - 1);
+    } else {
+        // Go to last story
+        swiperInstance.value?.slideTo(stories.length - 1);
+    }
+}
+
+function handleReachEnd() {
+    console.log('Reach end');
+    // Go to next story if available
+    if (activeStoryIndex.value < stories.length - 1) {
+        swiperInstance.value?.slideTo(activeStoryIndex.value + 1);
+    } else {
+        // Go to first story
+        swiperInstance.value?.slideTo(0);
+    }
+}
 
 watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
     if (newActiveSlideIndex === oldActiveSlideIndex) return;
@@ -53,7 +75,7 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
             class="stories-slider-container" :centered-slides="true" :centered-slides-bounds="false"
             @swiper="handleInit" @slideChange="handleSlideChange">
             <swiper-slide v-for="story in stories" :key="story.id" class="stories-slide">
-                <StoryCard :story="story" />
+                <StoryCard :story="story" @reach-start="handleReachStart" @reach-end="handleReachEnd" />
             </swiper-slide>
         </swiper>
     </div>

@@ -14,6 +14,11 @@ const { story } = defineProps<StoriesCardProps>();
 const uiStore = useUiStore();
 const storiesStore = useStoriesStore();
 
+const emit = defineEmits<{
+    (e: 'reach-start'): void
+    (e: 'reach-end'): void
+}>()
+
 watch(() => uiStore.isModalOpen, (isOpen) => {
     if (!isOpen) {
         resetStates()
@@ -180,6 +185,9 @@ const handlePrev = () => {
         if (video.value) {
             video.value.currentTime = 0
         }
+    } else {
+        // Trigger event that active story is at the start
+        emit('reach-start')
     }
 }
 
@@ -198,6 +206,9 @@ const handleNext = () => {
         if (video.value) {
             video.value.currentTime = 0
         }
+    } else {
+        // Trigger event that active story is at the end
+        emit('reach-end')
     }
 }
 
