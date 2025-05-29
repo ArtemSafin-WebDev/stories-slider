@@ -5,6 +5,7 @@ import SoundIcon from './icons/SoundIcon.vue';
 import NoSoundIcon from './icons/NoSoundIcon.vue';
 import { computed, ref, useTemplateRef, watchEffect, watch } from 'vue';
 import { useStoriesStore } from '../store/stories';
+import { onClickOutside } from '@vueuse/core';
 
 interface StoriesCardProps {
     story: Story
@@ -13,6 +14,8 @@ const { story } = defineProps<StoriesCardProps>();
 
 const uiStore = useUiStore();
 const storiesStore = useStoriesStore();
+
+const descElement = useTemplateRef<HTMLDivElement>('descElement')
 
 const emit = defineEmits<{
     (e: 'reach-start'): void
@@ -35,6 +38,11 @@ const cardHasVideo = computed(() => {
     return slides?.some((slide) => slide.video);
 });
 
+const isDescShown = ref(false)
+
+onClickOutside(descElement, () => {
+    isDescShown.value = false
+})
 
 const video = useTemplateRef<HTMLVideoElement>('video')
 const videoDuration = ref(0)
@@ -230,6 +238,7 @@ const handlePointerUp = () => {
     paused.value = false
 }
 
+
 </script>
 
 <template>
@@ -276,9 +285,11 @@ const handlePointerUp = () => {
                     </div>
                 </div>
                 <div class="story-card__bottom-row" v-if="isActiveStory">
-                    <div class="story-card__desc" v-if="desc">
+                    <div class="story-card__desc" v-if="desc" @mouseenter="isDescShown = true"
+                        @mouseleave="isDescShown = false" @touchstart.prevent="isDescShown = !isDescShown" :class="{
+                            shown: isDescShown
+                        }" ref="descElement">
                         <div class="story-card__desc-text" v-html="desc">
-
                         </div>
                     </div>
                     <button class="story-card__mute-btn" @click.prevent="uiStore.toggleMuted" v-if="cardHasVideo">
@@ -356,6 +367,8 @@ const handlePointerUp = () => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .story-card__slide-video {
@@ -380,6 +393,8 @@ const handlePointerUp = () => {
     height: 100%;
     object-fit: cover;
     transform: scale(1.01);
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .story__controls-layer {
@@ -487,14 +502,11 @@ const handlePointerUp = () => {
     line-height: 24px;
     letter-spacing: -0.6px;
     pointer-events: all;
+    cursor: pointer;
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            .story-card__desc-text {
-
-                max-height: max-content;
-            }
-
+    &.shown {
+        .story-card__desc-text {
+            max-height: max-content;
         }
     }
 }
