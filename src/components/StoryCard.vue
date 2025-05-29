@@ -254,7 +254,7 @@ const handlePointerUp = () => {
             </div>
         </div>
         <div class="story-card__grid" @pointerdown="handlePointerDown" @pointerup="handlePointerUp"
-            @pointerleave="handlePointerUp" @pointercancel="handlePointerUp">
+            @pointerleave="handlePointerUp" @pointercancel="handlePointerUp" @contextmenu.prevent>
             <div class="story-card__bg-wrapper" v-if="preview">
                 <img :src="preview" alt="" class="story-card__bg-image" loading="lazy">
             </div>
@@ -312,7 +312,14 @@ const handlePointerUp = () => {
     flex-grow: 1;
     width: 475px;
     zoom: 0.7;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
 
+    // & * {
+    //     user-select: none;
+    //     -webkit-user-drag: none;
+    // }
 
 
     @media only screen and (max-width: 576px) {
@@ -471,6 +478,7 @@ const handlePointerUp = () => {
     padding: 20px;
     padding-top: 40px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0) 100%);
+    min-height: 150px;
 }
 
 .story-card__mute-btn {
