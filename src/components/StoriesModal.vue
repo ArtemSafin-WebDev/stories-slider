@@ -59,6 +59,13 @@ const uiStore = useUiStore();
     grid-row: 1 / 2;
     grid-column: 1 / -1;
     margin-top: 16px;
+
+    @media only screen and (max-width: 576px) {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        margin-top: 24px;
+    }
 }
 
 .mw-logo {
@@ -68,7 +75,13 @@ const uiStore = useUiStore();
     grid-row: 1 / 2;
     align-self: flex-start;
     justify-self: flex-start;
+
+    @media only screen and (max-width: 576px) {
+        display: none;
+    }
 }
+
+
 
 .title {
     padding: 0;
@@ -80,7 +93,14 @@ const uiStore = useUiStore();
     letter-spacing: -0.8px;
     grid-column: 3 / 10;
     grid-row: 1 / 2;
+
+    @media only screen and (max-width: 576px) {
+        display: none;
+
+    }
+
 }
+
 
 .close {
     margin: 0;

@@ -84,6 +84,7 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
 <style scoped lang="scss">
 .stories-slider {
     display: block;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .stories-slider-container {
@@ -96,5 +97,9 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
     height: auto;
     display: flex;
     flex-direction: column;
+
+    @media only screen and (max-width: 576px) {
+        width: 100%;
+    }
 }
 </style>

@@ -12,7 +12,7 @@ const { preview, desc, logo, isNew } = story;
 
 <template>
     <div class="preview-card">
-        <div class="preview-card__image-container" :class="{ 'top-overlay': isNew || logo }" v-if="preview">
+        <div class="preview-card__image-container" v-if="preview">
             <img :src="preview" class="preview-card__image" loading="lazy">
         </div>
         <div class="preview-card__content">
@@ -42,6 +42,14 @@ const { preview, desc, logo, isNew } = story;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'stack';
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            .preview-card__image-container::after {
+                opacity: 1;
+            }
+        }
+    }
 }
 
 .preview-card__image-container {
@@ -50,17 +58,17 @@ const { preview, desc, logo, isNew } = story;
     grid-area: stack;
     position: relative;
 
-    &.top-overlay {
-        &::after {
-            content: '';
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.00) 100%);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 102px;
-        }
+    &::after {
+        content: '';
+        background-color: #00000059;
+        position: absolute;
+        inset: 0;
+        transition: opacity .2s;
+
+        opacity: 0;
     }
+
+
 }
 
 .preview-card__image {
@@ -85,6 +93,22 @@ const { preview, desc, logo, isNew } = story;
     align-items: flex-start;
     gap: 16px;
     justify-content: space-between;
+    margin: -20px;
+    margin-bottom: 0;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+
+    &::after {
+        content: '';
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.00) 100%);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 102px;
+        z-index: -1;
+    }
 }
 
 .preview-card__is-new {

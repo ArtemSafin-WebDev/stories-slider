@@ -300,6 +300,11 @@ const handlePointerUp = () => {
     flex-grow: 1;
     width: 475px;
     zoom: 0.7;
+
+    @media only screen and (max-width: 576px) {
+        width: auto;
+        zoom: 1;
+    }
 }
 
 .story-card__grid {

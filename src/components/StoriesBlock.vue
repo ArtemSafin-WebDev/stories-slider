@@ -80,12 +80,17 @@ const handleCardClick = (story: Story) => {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
+
+
 
 .heading {
     font-size: 80px;
@@ -96,6 +101,7 @@ const handleCardClick = (story: Story) => {
     padding: 0;
     margin: 0;
     margin-bottom: 120px;
+
 }
 
 .controls {
