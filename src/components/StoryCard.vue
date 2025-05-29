@@ -316,10 +316,6 @@ const handlePointerUp = () => {
     -webkit-user-drag: none;
     touch-action: none;
 
-    // & * {
-    //     user-select: none;
-    //     -webkit-user-drag: none;
-    // }
 
 
     @media only screen and (max-width: 576px) {
@@ -478,7 +474,7 @@ const handlePointerUp = () => {
     padding: 20px;
     padding-top: 40px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0) 100%);
-    min-height: 150px;
+    min-height: 170px;
 }
 
 .story-card__mute-btn {
