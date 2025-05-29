@@ -470,8 +470,8 @@ const handlePointerUp = () => {
     margin: -20px;
     margin-top: auto;
     padding: 20px;
-    padding-top: 40px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0) 100%);
+    padding-top: 120px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.70) 0%, rgba(0, 0, 0, 0) 100%);
     min-height: 170px;
 }
 
