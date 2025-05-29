@@ -99,5 +99,6 @@ onClickOutside(innerModal, () => {
     flex-grow: 1;
     padding: 0 20px;
     box-sizing: border-box;
+    flex-shrink: 0;
 }
 </style>

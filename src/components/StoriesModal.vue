@@ -42,7 +42,7 @@ const uiStore = useUiStore();
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-gap: 20px;
-    grid-template-rows: minmax(140px, 1fr) auto minmax(140px, 1fr);
+    grid-template-rows: minmax(80px, 1fr) auto minmax(80px, 1fr);
     font-family: "RF Dewi", sans-serif;
     zoom: 0.8;
 }
