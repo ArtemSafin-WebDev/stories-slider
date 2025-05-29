@@ -266,6 +266,7 @@ const handlePointerUp = () => {
                 <div class="story__controls-layer-next" @click="handleNext"></div>
             </div>
             <div class="story-card__content">
+                <div class="story-card__inactive-overlay" v-if="!isActiveStory"></div>
                 <div class="story-card__top-row">
                     <div class="story-card__is-new" v-if="isNew">
                         New
@@ -274,7 +275,7 @@ const handlePointerUp = () => {
                         <img class="story-card__logo" :src="logo" alt="Logo">
                     </div>
                 </div>
-                <div class="story-card__bottom-row">
+                <div class="story-card__bottom-row" v-if="isActiveStory">
                     <div class="story-card__desc" v-if="desc">
                         <div class="story-card__desc-text" v-html="desc">
 
@@ -330,6 +331,13 @@ const handlePointerUp = () => {
     grid-template-areas: 'stack';
     background-color: black;
 
+}
+
+.story-card__inactive-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: -1;
 }
 
 .story-card__slide {
