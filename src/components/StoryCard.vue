@@ -302,6 +302,8 @@ const handlePointerUp = () => {
     width: 475px;
     zoom: 0.7;
 
+
+
     @media only screen and (max-width: 576px) {
         width: auto;
         zoom: 1;
@@ -484,18 +486,26 @@ const handlePointerUp = () => {
     font-weight: 400;
     line-height: 24px;
     letter-spacing: -0.6px;
+    pointer-events: all;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            .story-card__desc-text {
+
+                max-height: max-content;
+            }
+
+        }
+    }
 }
 
 .story-card__desc-text {
 
-
-
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
+    transition: all 0.3s ease;
+    max-height: 72px;
+    interpolate-size: allow-keywords;
     overflow: hidden;
-    text-overflow: ellipsis;
+    user-select: none;
 }
 
 

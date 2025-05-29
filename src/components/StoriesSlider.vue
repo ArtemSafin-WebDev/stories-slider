@@ -102,4 +102,9 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
         width: 100%;
     }
 }
+
+:root {
+    interpolate-size: allow-keywords;
+    /* 👈 */
+}
 </style>
