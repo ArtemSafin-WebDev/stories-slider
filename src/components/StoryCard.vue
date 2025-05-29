@@ -507,6 +507,8 @@ const handlePointerUp = () => {
     letter-spacing: -0.6px;
     pointer-events: all;
     cursor: pointer;
+    position: relative;
+    z-index: 15;
 
     &.shown {
         .story-card__desc-text {
