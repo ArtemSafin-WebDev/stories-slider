@@ -314,9 +314,7 @@ const handlePointerUp = () => {
     zoom: 0.7;
     user-select: none;
     -webkit-user-drag: none;
-    touch-action: none;
-
-
+    touch-action: pan-y pinch-zoom;
 
     @media only screen and (max-width: 576px) {
         width: auto;
