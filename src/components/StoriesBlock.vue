@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import stories, { type Story } from '../data/stories';
+import { type Story } from '../data/stories';
 import PreviewCard from './PreviewCard.vue';
 import StoriesModal from './StoriesModal.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useUiStore } from '../store/ui';
 import { useStoriesStore } from '../store/stories';
 import { useSwiperNavigation } from '../composables/useSwiperNavigation';
+import { useQuery } from '@tanstack/vue-query';
+import { findAll } from '../api/stories/findAll';
 // @ts-ignore
 import "swiper/css";
 
@@ -15,8 +17,37 @@ const storiesStore = useStoriesStore();
 const { prevDisabled, nextDisabled, handlePrev, handleNext, handleInit, checkBtns } = useSwiperNavigation();
 
 
+const { data: stories, isLoading, isError } = useQuery({
+    queryKey: ['stories'],
+    queryFn: findAll,
+    select: (data) => {
+        const stories: Story[] = data.map(story => {
+            return {
+                id: story.id,
+                preview: story.acf.stories_image.sizes.full,
+                desc: story.acf.stories_text,
+                logo: story.acf.stories_logo.sizes.full,
+                isNew: story.acf.stories_new,
+                slides: story.acf.stories_inner.map(slide => {
+                    return {
+                        id: slide.stories_inner_image.id,
+                        image: slide.stories_inner_image.sizes.full,
+                        duration: slide.stories_inner_duration ? Number(slide.stories_inner_duration) : undefined,
+                        video: slide.stories_inner_file ? slide.stories_inner_file.url : undefined,
+                    }
+                })
+            }
+        })
+        return stories;
+    }
+})
+
+watchEffect(() => {
+    console.log('Data', stories.value);
+})
+
 const newStories = computed(() => {
-    return stories.filter((story) => story.isNew).length;
+    return stories.value?.filter((story) => story.isNew).length;
 })
 
 const handleCardClick = (story: Story) => {
@@ -34,7 +65,7 @@ const handleCardClick = (story: Story) => {
                     Истории
                 </h2>
                 <div class="controls">
-                    <div class="total" v-if="newStories > 0">
+                    <div class="total" v-if="newStories && newStories > 0">
                         Новых историй - {{ newStories }}
                     </div>
                     <div class="nav-btns">
@@ -46,7 +77,13 @@ const handleCardClick = (story: Story) => {
                         </button>
                     </div>
                 </div>
-                <div class="slider">
+                <div class="loading" v-if="isLoading">
+                    Загрузка...
+                </div>
+                <div class="error" v-if="isError">
+                    Ошибка загрузки
+                </div>
+                <div class="slider" v-if="stories && stories.length > 0">
                     <swiper slides-per-view="auto" :space-between="20" :long-swipes-ratio="0.2" :speed="600"
                         class="slider-container" @swiper="handleInit" @to-edge="checkBtns" @from-edge="checkBtns">
                         <swiper-slide v-for="story in stories" :key="story.id" class="slide">
@@ -73,6 +110,16 @@ const handleCardClick = (story: Story) => {
 
 .section-content {
     zoom: 0.8;
+}
+
+.loading,
+.error {
+    font-family: "RF Dewi", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.6px;
 }
 
 .slider-container {
@@ -124,6 +171,7 @@ const handleCardClick = (story: Story) => {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-left: auto;
 }
 
 .nav-btn {
