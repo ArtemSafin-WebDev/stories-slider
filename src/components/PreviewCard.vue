@@ -42,6 +42,7 @@ const { preview, desc, logo, isNew } = story;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'stack';
+    border-radius: 5px;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
@@ -53,7 +54,7 @@ const { preview, desc, logo, isNew } = story;
 }
 
 .preview-card__image-container {
-    border-radius: 5px;
+
     overflow: hidden;
     grid-area: stack;
     position: relative;

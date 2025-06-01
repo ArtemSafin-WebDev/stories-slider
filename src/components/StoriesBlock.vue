@@ -9,6 +9,7 @@ import { useStoriesStore } from '../store/stories';
 import { useSwiperNavigation } from '../composables/useSwiperNavigation';
 import { useQuery } from '@tanstack/vue-query';
 import { findAll } from '../api/stories/findAll';
+import Skeleton from './Skeleton.vue'
 // @ts-ignore
 import "swiper/css";
 
@@ -78,7 +79,9 @@ const handleCardClick = (story: Story) => {
                     </div>
                 </div>
                 <div class="loading" v-if="isLoading">
-                    Загрузка...
+                    <div class="slide" v-for="_n in 10" :key="_n">
+                        <Skeleton />
+                    </div>
                 </div>
                 <div class="error" v-if="isError">
                     Ошибка загрузки
@@ -110,6 +113,11 @@ const handleCardClick = (story: Story) => {
 
 .section-content {
     zoom: 0.8;
+}
+
+.loading {
+    display: flex;
+    gap: 20px;
 }
 
 .loading,
@@ -201,5 +209,6 @@ const handleCardClick = (story: Story) => {
 
 .slide {
     width: 300px;
+    flex-shrink: 0;
 }
 </style>

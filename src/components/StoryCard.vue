@@ -419,6 +419,7 @@ const handlePointerUp = () => {
     padding: 20px;
     z-index: 10;
     pointer-events: none;
+    position: relative;
 }
 
 .story-card__top-row {
