@@ -308,13 +308,14 @@ const handlePointerUp = () => {
 .story-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1rem;
     flex-grow: 1;
-    width: 475px;
-    zoom: 0.7;
+    width: 47.5rem;
     user-select: none;
     -webkit-user-drag: none;
     touch-action: pan-y pinch-zoom;
+
+    zoom: 0.8;
 
     @media only screen and (max-width: 576px) {
         width: auto;
@@ -327,7 +328,7 @@ const handlePointerUp = () => {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'stack';
-    border-radius: 5px;
+    border-radius: 0.5rem;
     overflow: hidden;
 
     &::before {
@@ -339,7 +340,6 @@ const handlePointerUp = () => {
 
 .story-card__slides {
     grid-area: stack;
-    // background-color: red;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'stack';
@@ -349,7 +349,7 @@ const handlePointerUp = () => {
 
 .story-card__inactive-overlay {
     position: absolute;
-    inset: 0;
+    inset: -2px;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: -1;
 }
@@ -416,7 +416,7 @@ const handlePointerUp = () => {
     grid-area: stack;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 2rem;
     z-index: 10;
     pointer-events: none;
     position: relative;
@@ -425,26 +425,26 @@ const handlePointerUp = () => {
 .story-card__top-row {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
-    margin: -20px;
+    gap: 1.6rem;
+    margin: -2rem;
     margin-bottom: 0;
-    padding: 20px;
+    padding: 2rem;
     padding-bottom: 0;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.00) 100%);
 }
 
 .story-card__is-new {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 20px;
-    letter-spacing: -0.48px;
+    line-height: 2rem;
+    letter-spacing: -0.048rem;
     color: white;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     background: #F14848;
     flex-shrink: 0;
     white-space: nowrap;
-    padding: 6px 10px;
+    padding: 0.6rem 1rem;
 }
 
 .story-card__logo-wrapper {
@@ -453,8 +453,8 @@ const handlePointerUp = () => {
     background: white;
     margin-left: auto;
     flex-shrink: 0;
-    width: 80px;
-    height: 80px;
+    width: 8rem;
+    height: 8rem;
 }
 
 .story-card__logo {
@@ -467,18 +467,18 @@ const handlePointerUp = () => {
 .story-card__bottom-row {
     display: flex;
     align-items: flex-end;
-    gap: 16px;
-    margin: -20px;
+    gap: 1.6rem;
+    margin: -2rem;
     margin-top: auto;
-    padding: 20px;
-    padding-top: 120px;
+    padding: 2rem;
+    padding-top: 12rem;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.70) 0%, rgba(0, 0, 0, 0) 100%);
-    min-height: 170px;
+    min-height: 17rem;
 }
 
 .story-card__mute-btn {
-    width: 64px;
-    height: 64px;
+    width: 6.4rem;
+    height: 6.4rem;
     border-radius: 50%;
     flex-shrink: 0;
     display: grid;
@@ -493,17 +493,17 @@ const handlePointerUp = () => {
     svg {
         fill: #212121;
         display: block;
-        width: 24px;
-        height: 24px;
+        width: 2.4rem;
+        height: 2.4rem;
     }
 }
 
 .story-card__desc {
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.6px;
+    line-height: 2.4rem;
+    letter-spacing: -0.06rem;
     pointer-events: all;
     cursor: pointer;
     position: relative;
@@ -519,7 +519,7 @@ const handlePointerUp = () => {
 .story-card__desc-text {
 
     transition: all 0.3s ease;
-    max-height: 72px;
+    max-height: 7.2rem;
     interpolate-size: allow-keywords;
     overflow: hidden;
     user-select: none;
@@ -527,13 +527,13 @@ const handlePointerUp = () => {
 
 
 .story-card__bullets {
-    gap: 5px;
+    gap: 0.5rem;
     display: flex;
     align-items: center;
 }
 
 .story-card__bullet {
-    height: 5px;
+    height: 0.5rem;
     width: 1px;
     flex-grow: 1;
     background-color: rgba(255, 255, 255, 0.1);
@@ -566,9 +566,9 @@ const handlePointerUp = () => {
 }
 
 .loader__circle {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #FFF;
+    width: 4.8rem;
+    height: 4.8rem;
+    border: 0.5rem solid #FFF;
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;

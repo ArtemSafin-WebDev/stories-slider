@@ -91,13 +91,13 @@ onClickOutside(innerModal, () => {
 }
 
 .container {
-    max-width: 1240px;
+    max-width: 184rem;
     margin: 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 0 20px;
+    padding: 0 2rem;
     box-sizing: border-box;
     flex-shrink: 0;
 }

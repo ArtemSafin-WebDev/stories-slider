@@ -71,10 +71,10 @@ const handleCardClick = (story: Story) => {
                     </div>
                     <div class="nav-btns">
                         <button class="nav-btn" @click="handlePrev" :disabled="nextDisabled">
-                            Назад
+                            назад
                         </button>
                         <button class="nav-btn" @click="handleNext" :disabled="prevDisabled">
-                            Вперед
+                            вперед
                         </button>
                     </div>
                 </div>
@@ -87,8 +87,8 @@ const handleCardClick = (story: Story) => {
                     Ошибка загрузки
                 </div>
                 <div class="slider" v-if="stories && stories.length > 0">
-                    <swiper slides-per-view="auto" :space-between="20" :long-swipes-ratio="0.2" :speed="600"
-                        class="slider-container" @swiper="handleInit" @to-edge="checkBtns" @from-edge="checkBtns">
+                    <swiper slides-per-view="auto" :long-swipes-ratio="0.2" :speed="600" class="slider-container"
+                        @swiper="handleInit" @to-edge="checkBtns" @from-edge="checkBtns">
                         <swiper-slide v-for="story in stories" :key="story.id" class="slide">
                             <PreviewCard :story="story" class="slide-card" @click.prevent="handleCardClick(story)" />
                         </swiper-slide>
@@ -102,8 +102,8 @@ const handleCardClick = (story: Story) => {
 
 <style scoped lang="scss">
 .section {
-    padding-top: 100px;
-    padding-bottom: 20px;
+    padding-top: 10rem;
+    padding-bottom: 2rem;
     background-color: #212121;
     color: white;
     font-family: "RF Dewi", sans-serif;
@@ -111,23 +111,20 @@ const handleCardClick = (story: Story) => {
     overflow: clip;
 }
 
-.section-content {
-    zoom: 0.8;
-}
+.section-content {}
 
 .loading {
     display: flex;
-    gap: 20px;
 }
 
 .loading,
 .error {
     font-family: "RF Dewi", sans-serif;
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.6px;
+    line-height: 2.4rem;
+    letter-spacing: -0.06rem;
 }
 
 .slider-container {
@@ -135,27 +132,27 @@ const handleCardClick = (story: Story) => {
 }
 
 .container {
-    max-width: 1240px;
+    max-width: 184rem;
     margin: 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 0 20px;
+    padding: 0 2rem;
     box-sizing: border-box;
 }
 
 
 
 .heading {
-    font-size: 80px;
+    font-size: 8rem;
     font-style: normal;
     font-weight: 400;
     line-height: 100%;
-    letter-spacing: -3.2px;
+    letter-spacing: -0.32rem;
     padding: 0;
     margin: 0;
-    margin-bottom: 120px;
+    margin-bottom: 12rem;
 
 }
 
@@ -163,32 +160,32 @@ const handleCardClick = (story: Story) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .total {
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.8px;
+    line-height: 2.4rem;
+    letter-spacing: -0.08rem;
 }
 
 .nav-btns {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
     margin-left: auto;
 }
 
 .nav-btn {
     font-family: "RF Dewi", sans-serif;
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.6px;
+    line-height: 2.4rem;
+    letter-spacing: -0.06rem;
     outline: none;
     border: none;
     background-color: transparent;
@@ -208,7 +205,12 @@ const handleCardClick = (story: Story) => {
 }
 
 .slide {
-    width: 300px;
+    width: 30rem;
     flex-shrink: 0;
+    margin-right: 2rem;
+
+    &:last-child {
+        margin-right: 0;
+    }
 }
 </style>

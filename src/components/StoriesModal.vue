@@ -41,10 +41,9 @@ const uiStore = useUiStore();
     flex-grow: 1;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-gap: 20px;
+    grid-gap: 2rem;
     grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
     font-family: "RF Dewi", sans-serif;
-    zoom: 0.8;
 
 }
 
@@ -56,21 +55,21 @@ const uiStore = useUiStore();
 .top-row {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-gap: 20px;
+    grid-gap: 2rem;
     grid-row: 1 / 2;
     grid-column: 1 / -1;
-    margin-top: 16px;
+    margin-top: 1.6rem;
 
     @media only screen and (max-width: 576px) {
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
-        margin-top: 24px;
+        margin-top: 2.4rem;
     }
 }
 
 .mw-logo {
-    width: 54px;
+    width: 5.4rem;
     height: auto;
     grid-column: 1 / 3;
     grid-row: 1 / 2;
@@ -82,16 +81,14 @@ const uiStore = useUiStore();
     }
 }
 
-
-
 .title {
     padding: 0;
     margin: 0;
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.8px;
+    line-height: 2.4rem;
+    letter-spacing: -0.08rem;
     grid-column: 3 / 10;
     grid-row: 1 / 2;
 
@@ -99,7 +96,6 @@ const uiStore = useUiStore();
         display: none;
 
     }
-
 }
 
 
@@ -112,7 +108,7 @@ const uiStore = useUiStore();
     justify-self: flex-end;
     grid-column: 11 / -1;
     justify-self: flex-end;
-    font-size: 20px;
+    font-size: 2rem;
     text-align: left;
     background: transparent;
     color: white;
@@ -120,8 +116,8 @@ const uiStore = useUiStore();
     outline: none;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.8px;
+    line-height: 2.4rem;
+    letter-spacing: -0.08rem;
     transition: color .2s;
     cursor: pointer;
     transition: color .2s;

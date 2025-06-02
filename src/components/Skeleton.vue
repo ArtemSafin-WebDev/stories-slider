@@ -11,9 +11,9 @@
 <style scoped lang="scss">
 .skeleton {
     width: 100%;
-    background-color: #111111;
+    background-color: #191919;
     aspect-ratio: 297 / 531;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     overflow: hidden;
     position: relative;
 

@@ -71,9 +71,9 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
 
 <template>
     <div class="stories-slider">
-        <swiper slides-per-view="auto" :space-between="20" :long-swipes-ratio="0.2" :speed="600"
-            class="stories-slider-container" :centered-slides="true" :centered-slides-bounds="false"
-            @swiper="handleInit" @slideChange="handleSlideChange">
+        <swiper slides-per-view="auto" :long-swipes-ratio="0.2" :speed="600" class="stories-slider-container"
+            :centered-slides="true" :centered-slides-bounds="false" @swiper="handleInit"
+            @slideChange="handleSlideChange">
             <swiper-slide v-for="story in stories" :key="story.id" class="stories-slide">
                 <StoryCard :story="story" @reach-start="handleReachStart" @reach-end="handleReachEnd" />
             </swiper-slide>
@@ -97,6 +97,7 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
     height: auto;
     display: flex;
     flex-direction: column;
+    margin: 0 1rem;
 
     @media only screen and (max-width: 576px) {
         width: 100%;

@@ -65,7 +65,6 @@ const { preview, desc, logo, isNew } = story;
         position: absolute;
         inset: 0;
         transition: opacity .2s;
-
         opacity: 0;
     }
 
@@ -86,17 +85,17 @@ const { preview, desc, logo, isNew } = story;
     display: flex;
     flex-direction: column;
     z-index: 5;
-    padding: 20px;
+    padding: 2rem;
 }
 
 .preview-card__row {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
+    gap: 1.6rem;
     justify-content: space-between;
-    margin: -20px;
+    margin: -2rem;
     margin-bottom: 0;
-    padding: 20px;
+    padding: 2rem;
     position: relative;
     z-index: 1;
 
@@ -107,29 +106,29 @@ const { preview, desc, logo, isNew } = story;
         left: 0;
         top: 0;
         width: 100%;
-        height: 102px;
+        height: 10.2rem;
         z-index: -1;
     }
 }
 
 .preview-card__is-new {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 20px;
-    letter-spacing: -0.48px;
-    padding: 6px 10px;
+    line-height: 2rem;
+    letter-spacing: -0.048rem;
+    padding: 0.6rem 1rem;
     color: white;
     background-color: #F14848;
     flex-shrink: 0;
-    border-radius: 5px;
+    border-radius: 0.5rem;
 
 }
 
 .preview-card__logo-wrapper {
     margin-left: auto;
-    width: 40px;
-    height: 40px;
+    width: 4rem;
+    height: 4rem;
     flex-shrink: 0;
     overflow: hidden;
     border-radius: 50%;
@@ -143,15 +142,14 @@ const { preview, desc, logo, isNew } = story;
 }
 
 .preview-card__desc {
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.8px;
-    margin: -20px;
-    padding: 20px;
-    padding-top: 40px;
-
+    line-height: 2.4rem;
+    letter-spacing: -0.08rem;
+    margin: -2rem;
+    padding: 2rem;
+    padding-top: 4rem;
     margin-top: auto;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.60) 100%);
 }
