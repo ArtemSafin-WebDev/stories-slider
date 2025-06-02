@@ -60,7 +60,7 @@ const uiStore = useUiStore();
     grid-column: 1 / -1;
     margin-top: 1.6rem;
 
-    @media only screen and (max-width: 576px) {
+    @media only screen and (max-width: 640px) {
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
@@ -76,7 +76,7 @@ const uiStore = useUiStore();
     align-self: flex-start;
     justify-self: flex-start;
 
-    @media only screen and (max-width: 576px) {
+    @media only screen and (max-width: 640px) {
         display: none;
     }
 }
@@ -92,7 +92,7 @@ const uiStore = useUiStore();
     grid-column: 3 / 10;
     grid-row: 1 / 2;
 
-    @media only screen and (max-width: 576px) {
+    @media only screen and (max-width: 640px) {
         display: none;
 
     }
@@ -121,6 +121,15 @@ const uiStore = useUiStore();
     transition: color .2s;
     cursor: pointer;
     transition: color .2s;
+
+    @media only screen and (max-width: 640px) {
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 2rem;
+        letter-spacing: -.032rem;
+        font-family: var(--inter-display);
+    }
 
     &:hover {
         color: #ffdf58;

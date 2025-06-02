@@ -109,6 +109,11 @@ const handleCardClick = (story: Story) => {
     font-family: "RF Dewi", sans-serif;
     overflow: hidden;
     overflow: clip;
+
+    @media only screen and (max-width: 640px) {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
 }
 
 .section-content {}
@@ -154,6 +159,15 @@ const handleCardClick = (story: Story) => {
     margin: 0;
     margin-bottom: 12rem;
 
+    @media only screen and (max-width: 640px) {
+        font-size: 4rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 100%;
+        letter-spacing: -.16rem;
+        margin-bottom: 15rem;
+    }
+
 }
 
 .controls {
@@ -162,6 +176,10 @@ const handleCardClick = (story: Story) => {
     align-items: center;
     gap: 2rem;
     margin-bottom: 3rem;
+
+    @media only screen and (max-width: 640px) {
+        margin-bottom: 1.5rem;
+    }
 }
 
 .total {
@@ -170,13 +188,25 @@ const handleCardClick = (story: Story) => {
     font-weight: 600;
     line-height: 2.4rem;
     letter-spacing: -0.08rem;
+
+    @media only screen and (max-width: 640px) {
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 2rem;
+        letter-spacing: -.064rem;
+    }
 }
 
 .nav-btns {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     margin-left: auto;
+
+    @media only screen and (max-width: 640px) {
+        display: none;
+    }
 }
 
 .nav-btn {
@@ -208,6 +238,11 @@ const handleCardClick = (story: Story) => {
     width: 30rem;
     flex-shrink: 0;
     margin-right: 2rem;
+
+    @media only screen and (max-width: 640px) {
+        width: 24.9rem;
+        margin-right: 1rem;
+    }
 
     &:last-child {
         margin-right: 0;

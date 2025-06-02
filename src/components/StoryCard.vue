@@ -288,8 +288,11 @@ const handlePointerUp = () => {
                     <div class="story-card__desc" v-if="desc" @mouseenter="isDescShown = true"
                         @mouseleave="isDescShown = false" @touchstart.prevent="isDescShown = !isDescShown" :class="{
                             shown: isDescShown
-                        }" ref="descElement">
-                        <div class="story-card__desc-text" v-html="desc">
+                        }" ref="descElement" :data-text="desc">
+                        <div class="story-card__desc-text" :class="{
+                            shown: isDescShown
+                        }">
+                            {{ desc }}
                         </div>
                     </div>
                     <button class="story-card__mute-btn" @click.prevent="uiStore.toggleMuted" v-if="cardHasVideo">
@@ -315,9 +318,11 @@ const handlePointerUp = () => {
     -webkit-user-drag: none;
     touch-action: pan-y pinch-zoom;
 
-    zoom: 0.8;
 
-    @media only screen and (max-width: 576px) {
+    width: 40rem;
+
+
+    @media only screen and (max-width: 640px) {
         width: auto;
         zoom: 1;
     }
@@ -420,6 +425,10 @@ const handlePointerUp = () => {
     z-index: 10;
     pointer-events: none;
     position: relative;
+
+    @media only screen and (max-width: 640px) {
+        padding: 1.5rem;
+    }
 }
 
 .story-card__top-row {
@@ -453,8 +462,16 @@ const handlePointerUp = () => {
     background: white;
     margin-left: auto;
     flex-shrink: 0;
-    width: 8rem;
-    height: 8rem;
+    // width: 8rem;
+    // height: 8rem;
+
+    width: 6.4rem;
+    height: 6.4rem;
+
+    @media only screen and (max-width: 640px) {
+        width: 6.4rem;
+        height: 6.4rem;
+    }
 }
 
 .story-card__logo {
@@ -490,39 +507,90 @@ const handlePointerUp = () => {
     cursor: pointer;
     pointer-events: all;
 
+    @media only screen and (max-width: 640px) {
+        width: 4.4rem;
+        height: 4.4rem;
+    }
+
     svg {
         fill: #212121;
         display: block;
         width: 2.4rem;
         height: 2.4rem;
+
+        @media only screen and (max-width: 640px) {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
     }
 }
 
 .story-card__desc {
+
+    position: relative;
+    z-index: 15;
+    // overflow: hidden;
+    cursor: pointer;
+    pointer-events: all;
     font-size: 2rem;
     font-style: normal;
     font-weight: 400;
     line-height: 2.4rem;
-    letter-spacing: -0.06rem;
-    pointer-events: all;
-    cursor: pointer;
-    position: relative;
-    z-index: 15;
+    letter-spacing: -.06rem;
 
-    &.shown {
-        .story-card__desc-text {
-            max-height: max-content;
+    &::after {
+        content: attr(data-text);
+
+        color: #fff;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        transition: opacity .2s;
+        opacity: 1;
+        overflow: hidden;
+        opacity: 0;
+
+
+    }
+
+    &:not(.shown) {
+        &::after {
+            opacity: 1;
+
         }
+    }
+
+    @media only screen and (max-width: 640px) {
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 2rem;
+        letter-spacing: -.032rem;
+        font-family: var(--inter-display);
     }
 }
 
 .story-card__desc-text {
 
-    transition: all 0.3s ease;
-    max-height: 7.2rem;
-    interpolate-size: allow-keywords;
-    overflow: hidden;
+    transition: transform .4s, color .2s;
+    -webkit-user-select: none;
     user-select: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    // transform: translateY(100%);
+    width: 100%;
+
+    &:not(.shown) {
+
+
+        color: transparent;
+
+    }
+
+
 }
 
 

@@ -99,7 +99,7 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
     flex-direction: column;
     margin: 0 1rem;
 
-    @media only screen and (max-width: 576px) {
+    @media only screen and (max-width: 640px) {
         width: 100%;
     }
 }

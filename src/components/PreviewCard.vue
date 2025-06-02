@@ -42,7 +42,7 @@ const { preview, desc, logo, isNew } = story;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'stack';
-    border-radius: 5px;
+    border-radius: 0.5rem;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
@@ -86,6 +86,10 @@ const { preview, desc, logo, isNew } = story;
     flex-direction: column;
     z-index: 5;
     padding: 2rem;
+
+    @media only screen and (max-width: 640px) {
+        padding: 1rem;
+    }
 }
 
 .preview-card__row {
@@ -123,6 +127,16 @@ const { preview, desc, logo, isNew } = story;
     flex-shrink: 0;
     border-radius: 0.5rem;
 
+    @media only screen and (max-width: 640px) {
+        font-size: 1.2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1.6rem;
+        letter-spacing: -.036rem;
+        padding: .4rem .8rem;
+        border-radius: .5rem;
+    }
+
 }
 
 .preview-card__logo-wrapper {
@@ -132,6 +146,8 @@ const { preview, desc, logo, isNew } = story;
     flex-shrink: 0;
     overflow: hidden;
     border-radius: 50%;
+
+
 }
 
 .preview-card__logo {
@@ -152,6 +168,15 @@ const { preview, desc, logo, isNew } = story;
     padding-top: 4rem;
     margin-top: auto;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.60) 100%);
+
+    @media only screen and (max-width: 640px) {
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 2rem;
+        letter-spacing: -.032rem;
+        font-family: var(--inter-display);
+    }
 }
 
 .preview-card__desc-text {
