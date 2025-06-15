@@ -27,6 +27,7 @@ const { data: stories, isLoading, isError } = useQuery({
                 id: story.id,
                 preview: story.acf.stories_image.sizes.full,
                 desc: story.acf.stories_text,
+                fullDesc: story.acf.stories_full_text,
                 logo: story.acf.stories_logo.sizes.full,
                 isNew: story.acf.stories_new,
                 slides: story.acf.stories_inner.map(slide => {

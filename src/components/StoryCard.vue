@@ -32,13 +32,22 @@ const isActiveStory = computed(() => {
     return storiesStore.activeStory?.id === story.id;
 })
 
-const { isNew, logo, desc, slides, preview } = story;
+const { isNew, logo, desc, fullDesc, slides, preview } = story;
 
 const cardHasVideo = computed(() => {
     return slides?.some((slide) => slide.video);
 });
 
 const isDescShown = ref(false)
+
+const description = computed(() => {
+    if (!fullDesc?.trim()) {
+        if (desc?.trim()) return desc;
+        return ''
+    }
+    return fullDesc;
+})
+
 
 onClickOutside(descElement, () => {
     isDescShown.value = false
@@ -265,8 +274,8 @@ const handlePointerUp = () => {
                         class="story-card__slide-video" v-if="activeSlide.video" ref="video"
                         @loadedmetadata="handleVideoMetadataLoaded" @canplay="handleVideoCanPlay"
                         @waiting="handleVideoWaiting"></video>
-                    <div class="loader" v-if="currentSlideHasVideo && !isVideoReady">
-                        <div class="loader__circle"></div>
+                    <div class="story-card__loader" v-if="currentSlideHasVideo && !isVideoReady">
+                        <div class="story-card__loader__circle"></div>
                     </div>
                 </div>
             </div>
@@ -292,7 +301,7 @@ const handlePointerUp = () => {
                         <div class="story-card__desc-text" :class="{
                             shown: isDescShown
                         }">
-                            {{ desc }}
+                            {{ description }}
                         </div>
                     </div>
                     <button class="story-card__mute-btn" @click.prevent="uiStore.toggleMuted" v-if="cardHasVideo">
@@ -624,16 +633,16 @@ const handlePointerUp = () => {
 }
 
 
-.loader {
+.story-card__loader {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
+    z-index: 5;
     pointer-events: none;
 }
 
-.loader__circle {
+.story-card__loader__circle {
     width: 4.8rem;
     height: 4.8rem;
     border: 0.5rem solid #FFF;

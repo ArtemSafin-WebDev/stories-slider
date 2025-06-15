@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import StoryCard from './StoryCard.vue';
 // @ts-ignore
 import "swiper/css";
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
 import { useStoriesStore } from '../store/stories';
 
 interface StoriesSliderProps {
@@ -16,10 +16,27 @@ const swiperInstance = ref<SwiperInstance>();
 const activeSlideIndex = ref(0);
 const storiesStore = useStoriesStore();
 const { stories = [] } = defineProps<StoriesSliderProps>();
+const windowWidth = ref(window.innerWidth);
+
+const isMobile = computed(() => {
+    return windowWidth.value <= 640;
+});
 
 const activeStoryIndex = computed(() => {
     return stories.findIndex((story) => story.id === storiesStore.activeStory?.id);
 })
+
+const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+});
 
 watch([swiperInstance, activeStoryIndex], ([newInstance, newActiveStoryIndex]) => {
     if (!newInstance) return;
@@ -72,7 +89,7 @@ watch(activeSlideIndex, (newActiveSlideIndex, oldActiveSlideIndex) => {
 <template>
     <div class="stories-slider">
         <swiper slides-per-view="auto" :long-swipes-ratio="0.2" :speed="600" class="stories-slider-container"
-            :centered-slides="true" :centered-slides-bounds="false" @swiper="handleInit"
+            :centered-slides="true" :centered-slides-bounds="false" :allow-touch-move="!isMobile" @swiper="handleInit"
             @slideChange="handleSlideChange">
             <swiper-slide v-for="story in stories" :key="story.id" class="stories-slide">
                 <StoryCard :story="story" @reach-start="handleReachStart" @reach-end="handleReachEnd" />

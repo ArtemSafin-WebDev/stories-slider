@@ -2,6 +2,7 @@ type Story = {
   id: number | string;
   preview: string;
   desc?: string;
+  fullDesc?: string;
   logo?: string;
   isNew?: boolean;
   slides?: StorySlide[];
